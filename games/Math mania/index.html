@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quick Math</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="board">
+  <a href="../../index.html" style="display:inline-block;margin-bottom:10px;font-size:.75rem;color:#003893;text-decoration:none;">← All Games</a>
+
+  <header class="board-head">
+    <span class="board-title">QUICK MATH</span>
+    <span class="board-best">BEST <b id="best-score">0</b></span>
+  </header>
+
+  <!-- START PANEL -->
+  <section id="panel-start" class="panel">
+    <p class="lede">60 seconds. How many can you solve?</p>
+    <button id="btn-start" class="btn-primary">START</button>
+  </section>
+
+  <!-- GAME PANEL -->
+  <section id="panel-game" class="panel hidden">
+
+    <div class="readout">
+      <div class="readout-cell">
+        <span class="readout-label">Time</span>
+        <span class="readout-value" id="time-left">60</span>
+      </div>
+      <div class="readout-cell">
+        <span class="readout-label">Score</span>
+        <span class="readout-value" id="score">0</span>
+      </div>
+    </div>
+
+    <div class="timebar-track">
+      <div class="timebar-fill" id="timebar"></div>
+    </div>
+
+    <div class="question-zone">
+      <div class="question" id="question">--</div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+
+    <div class="choices" id="choices">
+      <button class="choice-btn" data-idx="0"></button>
+      <button class="choice-btn" data-idx="1"></button>
+      <button class="choice-btn" data-idx="2"></button>
+      <button class="choice-btn" data-idx="3"></button>
+    </div>
+
+  </section>
+
+  <!-- RESULT PANEL -->
+  <section id="panel-result" class="panel hidden">
+    <p class="lede">Time's up</p>
+    <div class="final-score" id="final-score">0</div>
+    <div class="result-split">
+      <span class="split-correct"><b id="result-correct">0</b> correct</span>
+      <span class="split-wrong"><b id="result-wrong">0</b> wrong</span>
+    </div>
+    <p class="new-best hidden" id="new-best-msg">New best score</p>
+    <button id="btn-again" class="btn-primary">PLAY AGAIN</button>
+  </section>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

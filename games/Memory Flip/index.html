@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memory Flip — Daily Bulletin Puzzle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@500;600;700;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="sheet">
+  <a href="../../index.html" style="display:inline-block;margin-bottom:10px;font-size:.8rem;color:#003893;text-decoration:none;">← All Games</a>
+  <header class="masthead">
+    <div class="flagbar"></div>
+    <div class="kicker">DAILY BULLETIN &nbsp;·&nbsp; PUZZLE PAGE</div>
+    <h1 class="title">Memory Flip</h1>
+    <div class="subhead">Match the day's headlines before the time ends</div>
+  </header>
+
+  <div class="dateline">
+    <div class="stat">
+      <span class="num" id="stat-time">60</span>
+      <span class="label">SECONDS</span>
+    </div>
+    <span class="divider-dot">·</span>
+    <div class="stat">
+      <span class="num" id="stat-pairs">0/8</span>
+      <span class="label">MATCHED</span>
+    </div>
+    <span class="divider-dot">·</span>
+    <div class="stat">
+      <span class="num" id="stat-moves">0</span>
+      <span class="label">MOVES</span>
+    </div>
+    <span class="divider-dot">·</span>
+    <div class="stat">
+      <span class="num" id="stat-score">1000</span>
+      <span class="label">SCORE</span>
+    </div>
+    <span class="divider-dot">·</span>
+    <div class="stat">
+      <span class="num" id="stat-best">0</span>
+      <span class="label">BEST</span>
+    </div>
+  </div>
+
+  <div class="board" id="board" role="grid" aria-label="Memory game board"></div>
+
+  <div class="controls">
+    <button class="btn" id="restart-btn">Reset Edition</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="flagbar"></div>
+    <div class="kicker" id="modal-kicker">FINAL EDITION</div>
+    <h2 id="modal-headline">All Stories Matched</h2>
+    <div class="modal-stats">
+      <div class="row"><strong id="modal-score">0</strong>Final score</div>
+      <div class="row"><strong id="modal-moves">0</strong>Moves taken</div>
+      <div class="row"><strong id="modal-time">0s</strong>Time used</div>
+      <div class="row best"><strong id="modal-best">0</strong>Best score</div>
+    </div>
+    <div id="modal-newbest" style="display:none" class="new-best">★ NEW BEST SCORE</div>
+    <button class="btn" id="modal-restart-btn">Play Again</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
