@@ -52,30 +52,6 @@ h2 {
   color: #6b6b6b;
 }
 
-.top-meta{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:8px;
-  flex-wrap:wrap;
-  margin:12px 0;
-}
-
-.tps{
-  font-size: .9rem;
-  color:#6b6b6b;
-  margin-top: -6px;
-  margin-bottom: 8px;
-}
-
-#challenge-result{
-  font-size: .9rem;
-  font-weight:700;
-  margin-top: 4px;
-}
-#challenge-result.won{ color:#0a7a3d; }
-#challenge-result.lost{ color:#6b6b6b; }
-
 button {
   border: none;
   border-radius: 12px;
@@ -134,15 +110,6 @@ button {
 #tap-btn:active {
   background: #a80d25;
   transform: scale(0.97);
-}
-
-@keyframes tapPulse {
-  0%   { transform: scale(0.94); }
-  60%  { transform: scale(1.03); }
-  100% { transform: scale(1); }
-}
-#tap-btn.tap-pulse {
-  animation: tapPulse 0.18s ease-out;
 }
 
 #final-score {

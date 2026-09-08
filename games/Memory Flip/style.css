@@ -71,15 +71,6 @@
     margin-top: 8px;
   }
 
-  .top-meta{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-top:12px;
-  }
-
   /* ===== Dateline / stats strip ===== */
   .dateline{
     display:flex;

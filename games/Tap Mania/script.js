@@ -1,15 +1,13 @@
 // Config
 const GAME_DURATION = 10; // seconds
 const COUNTDOWN_DURATION = 3; // seconds
-const GAME_ID = "tapmania";
 
 // State
 let tapCount = 0;
 let timeRemaining = GAME_DURATION;
-let bestScore = KG.getBest(GAME_ID);
+let bestScore = Number(localStorage.getItem('tapManiaBest')) || 0;
 let gameTimer = null;
 let countdownTimer = null;
-const challenge = KG.dailyTapChallenge();
 
 // Screens
 const screens = {
@@ -25,27 +23,13 @@ const countdownNumber = document.getElementById('countdown-number');
 const timeDisplay = document.getElementById('time-display');
 const scoreDisplay = document.getElementById('score-display');
 const finalScore = document.getElementById('final-score');
-const tapsPerSecEl = document.getElementById('taps-per-sec');
 const newBestMsg = document.getElementById('new-best-msg');
-const challengeResultEl = document.getElementById('challenge-result');
-const challengeTagEl = document.getElementById('challenge-tag');
 const tapBtn = document.getElementById('tap-btn');
 const startBtn = document.getElementById('start-btn');
 const playAgainBtn = document.getElementById('play-again-btn');
-const shareBtn = document.getElementById('share-btn');
-const streakBadgeEl = document.getElementById('streak-badge');
-const editionLabelEl = document.getElementById('edition-label');
 
 // Init
 bestScoreDisplay.textContent = bestScore;
-challengeTagEl.textContent = "🎯 Today's Challenge: " + challenge.label;
-editionLabelEl.textContent = "Edition #" + KG.editionNumber();
-refreshStreakBadge();
-
-function refreshStreakBadge(){
-  const streak = KG.getStreak();
-  KG.renderStreakBadge(streakBadgeEl, streak.count);
-}
 
 function showScreen(name) {
   Object.values(screens).forEach(s => s.classList.remove('active'));
@@ -93,37 +77,21 @@ function startGame() {
 function handleTap() {
   tapCount++;
   scoreDisplay.textContent = tapCount;
-  tapBtn.classList.remove('tap-pulse');
-  void tapBtn.offsetWidth; // restart animation
-  tapBtn.classList.add('tap-pulse');
-}
-
-function shareText() {
-  const tps = (tapCount / GAME_DURATION).toFixed(1);
-  return "👆 I hit " + tapCount + " taps (" + tps + "/sec) in Kantipur Tap Mania (Edition #" +
-    KG.editionNumber() + "). Can you beat me?\n" + location.href.split("?")[0];
 }
 
 function endGame() {
   finalScore.textContent = tapCount;
-  tapsPerSecEl.textContent = (tapCount / GAME_DURATION).toFixed(1) + " taps/sec";
 
-  const result = KG.finishRound(GAME_ID, tapCount);
-  bestScore = result.best;
+  if (tapCount > bestScore) {
+    bestScore = tapCount;
+    localStorage.setItem('tapManiaBest', bestScore);
+    newBestMsg.classList.remove('hidden');
+  } else {
+    newBestMsg.classList.add('hidden');
+  }
+
   bestScoreDisplay.textContent = bestScore;
-  newBestMsg.classList.toggle('hidden', !result.isNewBest);
-
-  const beatChallenge = tapCount >= challenge.target;
-  challengeResultEl.classList.remove('hidden');
-  challengeResultEl.classList.toggle('won', beatChallenge);
-  challengeResultEl.classList.toggle('lost', !beatChallenge);
-  challengeResultEl.textContent = beatChallenge
-    ? "🎯 Challenge complete — " + challenge.label + "!"
-    : "🎯 " + challenge.label + " — " + (challenge.target - tapCount) + " short. Try again!";
-
-  refreshStreakBadge();
   showScreen('result');
-  KG.attachShareButton(shareBtn, shareText);
 }
 
 // Events

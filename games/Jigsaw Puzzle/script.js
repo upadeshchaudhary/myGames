@@ -1,24 +1,26 @@
 // ---- Config ----
-const GAME_ID = "jigsaw";
+const GRID = 4;
+const TOTAL = GRID * GRID;
 const TIME_LIMIT = 180;
-const DIFFICULTIES = { easy: 3, normal: 4, hard: 5 };
-const HINT_PENALTY = 40;
 
-const PUZZLES = KG.allPhotos();
-const TODAY_PUZZLE = KG.dailyPhoto();
+// Swap these picsum placeholders for real photos, e.g. images/everest.jpg
+const PUZZLES = [
+  { id: 1, title: "Mount Everest",           img: "https://picsum.photos/seed/everest/800/800" },
+  { id: 2, title: "Kathmandu Durbar Square", img: "https://picsum.photos/seed/kathmandu/800/800" },
+  { id: 3, title: "Pokhara & Phewa Lake",    img: "https://picsum.photos/seed/pokhara/800/800" },
+  { id: 4, title: "Pashupatinath",           img: "https://picsum.photos/seed/pashupatinath/800/800" },
+  { id: 5, title: "Mustang Valley",          img: "https://picsum.photos/seed/mustang/800/800" },
+];
 
 // ---- State ----
-let GRID = DIFFICULTIES.normal;
-let TOTAL = GRID * GRID;
-let difficulty = "normal";
 let pieces = [];        // {id, correctPos, currentPos}
 let selectedIdx = null;
 let moves = 0;
 let timeRemaining = TIME_LIMIT;
 let timer = null;
-let currentPuzzle = TODAY_PUZZLE;
+let currentPuzzle = PUZZLES[0];
 let finished = false;
-let browsingPast = false;
+const bestScores = {};  // in-memory, resets on reload
 
 const boardEl = document.getElementById('board');
 const pickerEl = document.getElementById('picker');
@@ -28,22 +30,8 @@ const scoreEl = document.getElementById('scoreVal');
 const titleEl = document.getElementById('puzzleTitle');
 const bestEl = document.getElementById('bestVal');
 const overlay = document.getElementById('overlay');
-const streakBadgeEl = document.getElementById('streak-badge');
-const editionLabelEl = document.getElementById('edition-label');
-const pastToggle = document.getElementById('pastPhotosToggle');
-const shareBtn = document.getElementById('shareBtn');
-const photoCreditEl = document.getElementById('photoCredit');
-const hintBtn = document.getElementById('hintBtn');
 
-editionLabelEl.textContent = "Edition #" + KG.editionNumber();
-refreshStreakBadge();
-
-function refreshStreakBadge(){
-  const streak = KG.getStreak();
-  KG.renderStreakBadge(streakBadgeEl, streak.count);
-}
-
-function variantKey(){ return difficulty; }
+function bestKey(id){ return id; }
 
 function buildPicker(){
   pickerEl.innerHTML = '';
@@ -51,29 +39,11 @@ function buildPicker(){
     const d = document.createElement('div');
     d.className = 'thumb' + (p.id===currentPuzzle.id ? ' active':'');
     d.style.backgroundImage = `url(${p.img})`;
-    d.title = p.id === TODAY_PUZZLE.id ? p.title + " (Today's Photo)" : p.title;
+    d.title = p.title;
     d.onclick = ()=>{ currentPuzzle = p; loadPuzzle(); };
     pickerEl.appendChild(d);
   });
 }
-
-pastToggle.addEventListener('click', () => {
-  browsingPast = !browsingPast;
-  pickerEl.style.display = browsingPast ? 'flex' : 'none';
-  pastToggle.textContent = browsingPast ? '· hide' : '· browse past photos';
-  if(browsingPast) buildPicker();
-});
-
-document.querySelectorAll('.diff-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    difficulty = btn.dataset.diff;
-    GRID = DIFFICULTIES[difficulty];
-    TOTAL = GRID * GRID;
-    loadPuzzle();
-  });
-});
 
 function loadPuzzle(){
   clearInterval(timer);
@@ -82,9 +52,8 @@ function loadPuzzle(){
   timeRemaining = TIME_LIMIT;
   selectedIdx = null;
   overlay.classList.remove('show');
-  titleEl.textContent = currentPuzzle.title + (currentPuzzle.id === TODAY_PUZZLE.id ? " · Today's Photo" : "");
-  boardEl.style.gridTemplateColumns = `repeat(${GRID}, 1fr)`;
-  if(browsingPast) buildPicker();
+  titleEl.textContent = currentPuzzle.title;
+  buildPicker();
   createPieces();
   shufflePieces();
   renderBoard();
@@ -190,56 +159,30 @@ function checkCompletion(){
   }
 }
 
-function showHint(){
-  if(finished) return;
-  // Find a piece that's not yet in its correct slot and briefly flash it.
-  const misplaced = pieces.filter(p => p.currentPos !== p.correctPos);
-  if(misplaced.length === 0) return;
-  const target = misplaced[Math.floor(Math.random() * misplaced.length)];
-  const ordered = [...pieces].sort((a,b)=>a.currentPos-b.currentPos);
-  const correctSlotPiece = ordered[target.correctPos];
-  const els = boardEl.querySelectorAll('.piece');
-  const currentSlotEl = els[target.currentPos];
-  const correctSlotEl = els[target.correctPos];
-  [currentSlotEl, correctSlotEl].forEach(el => {
-    if(!el) return;
-    el.style.outline = '3px solid #ffb703';
-    setTimeout(() => { el.style.outline = ''; renderBoard(); }, 1000);
-  });
-  // A hint costs a small score penalty, same as extra moves.
-  moves += Math.ceil(HINT_PENALTY / 5);
-  updateStats();
-}
-
-function shareText(won, score){
-  const emojis = won ? "🧩🟩🟩🟩" : "🧩🟨⏰";
-  return `${emojis} I scored ${score} on Kantipur Daily Jigsaw — "${currentPuzzle.title}" (Edition #${KG.editionNumber()}). Beat that!\n${location.href.split("?")[0]}`;
-}
-
 function endGame(won){
   finished = true;
   const score = won ? calculateScore() : 0;
   document.getElementById('finalScore').textContent = won ? score : '⏰';
   document.getElementById('finalStats').textContent = won
-    ? `Moves: ${moves} · Time: ${TIME_LIMIT-timeRemaining}s · ${GRID}×${GRID}`
+    ? `Moves: ${moves} · Time: ${TIME_LIMIT-timeRemaining}s`
     : `Out of time — moves made: ${moves}`;
   document.getElementById('finalScore').parentElement.querySelector('h2').textContent =
     won ? '🎉 Puzzle Complete!' : '⏰ Time\'s Up!';
-  photoCreditEl.textContent = `📸 ${currentPuzzle.title} · ${currentPuzzle.credit}`;
   overlay.classList.add('show');
-  if(won){
-    KG.finishRound(GAME_ID, score, variantKey()); // updates best + today's score + streak
-  } else {
-    KG.recordPlay(GAME_ID); // still counts toward the daily streak
-  }
+  if(won) saveBest(score);
+}
+
+function saveBest(score){
+  const key = bestKey(currentPuzzle.id);
+  const prev = bestScores[key] || 0;
+  if(score > prev) bestScores[key] = score;
   showBest();
-  refreshStreakBadge();
-  KG.attachShareButton(shareBtn, () => shareText(won, score));
 }
 
 function showBest(){
-  const best = KG.getBest(GAME_ID, variantKey());
-  bestEl.textContent = 'Best (' + GRID + '×' + GRID + '): ' + (best || '--');
+  const key = bestKey(currentPuzzle.id);
+  const prev = bestScores[key];
+  bestEl.textContent = 'Best: ' + (prev ? prev : '--');
 }
 
 document.getElementById('restartBtn').onclick = loadPuzzle;
@@ -247,6 +190,5 @@ document.getElementById('shuffleBtn').onclick = ()=>{
   shufflePieces(); renderBoard(); moves=0; selectedIdx=null; updateStats();
 };
 document.getElementById('playAgainBtn').onclick = loadPuzzle;
-hintBtn.onclick = showHint;
 
 loadPuzzle();

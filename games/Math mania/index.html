@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Quick Math</title>
-<link rel="stylesheet" href="../../assets/hub-core.css">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,10 +15,6 @@
     <span class="board-title">QUICK MATH</span>
     <span class="board-best">BEST <b id="best-score">0</b></span>
   </header>
-  <div class="top-meta">
-    <span class="kg-edition" id="edition-label">Edition —</span>
-    <span class="kg-streak" id="streak-badge">🔥 0 day streak</span>
-  </div>
 
   <!-- START PANEL -->
   <section id="panel-start" class="panel">
@@ -46,7 +41,6 @@
     </div>
 
     <div class="question-zone">
-      <div class="kg-challenge-tag hidden" id="nepal-tag" style="margin-bottom:6px;">🇳🇵 Nepal Numbers</div>
       <div class="question" id="question">--</div>
       <div class="feedback" id="feedback"></div>
     </div>
@@ -69,15 +63,11 @@
       <span class="split-wrong"><b id="result-wrong">0</b> wrong</span>
     </div>
     <p class="new-best hidden" id="new-best-msg">New best score</p>
-    <div class="kg-result-actions">
-      <button id="btn-again" class="btn-primary">TRY AGAIN</button>
-      <button class="kg-share-btn" id="btn-share">📤 Share Score</button>
-    </div>
+    <button id="btn-again" class="btn-primary">PLAY AGAIN</button>
   </section>
 
 </div>
 
-<script src="../../assets/hub-core.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

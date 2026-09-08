@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kantipur Games</title>
-<link rel="stylesheet" href="assets/hub-core.css">
 <style>
   :root{
     --bg:#f7f5ef;
@@ -23,12 +22,12 @@
     min-height:100vh;
     padding:32px 16px 60px;
   }
-  .wrap{max-width:860px;margin:0 auto}
+  .wrap{max-width:820px;margin:0 auto}
   header{
     text-align:center;
     border-bottom:4px solid var(--ink);
     padding-bottom:14px;
-    margin-bottom:22px;
+    margin-bottom:28px;
   }
   .flagbar{
     height:6px;
@@ -55,81 +54,6 @@
     margin-top:8px;
     font-style:italic;
   }
-
-  .top-row{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-top:14px;
-  }
-
-  /* ---- Featured game hero ---- */
-  .hero{
-    background:linear-gradient(135deg, var(--blue), #002869);
-    color:#fff;
-    border-radius:18px;
-    padding:26px 24px;
-    margin-bottom:28px;
-    position:relative;
-    overflow:hidden;
-    box-shadow:0 14px 34px rgba(0,40,105,.25);
-  }
-  .hero::after{
-    content:"";
-    position:absolute; inset:0;
-    background:radial-gradient(circle at 90% -10%, rgba(200,16,46,.35), transparent 55%);
-    pointer-events:none;
-  }
-  .hero-kicker{
-    font-size:11px;
-    letter-spacing:.16em;
-    text-transform:uppercase;
-    color:#ffd166;
-    font-weight:800;
-    margin-bottom:8px;
-  }
-  .hero-title{
-    font-size:clamp(22px,5vw,32px);
-    font-weight:800;
-    display:flex;
-    align-items:center;
-    gap:10px;
-  }
-  .hero-desc{
-    margin-top:8px;
-    font-size:.92rem;
-    color:#dbe4f7;
-    max-width:520px;
-  }
-  .hero-cta{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    margin-top:18px;
-    background:var(--crimson);
-    color:#fff;
-    text-decoration:none;
-    font-weight:800;
-    font-size:.9rem;
-    letter-spacing:.02em;
-    padding:12px 22px;
-    border-radius:11px;
-    box-shadow:0 8px 18px rgba(200,16,46,.4);
-    transition:transform .15s ease;
-  }
-  .hero-cta:hover{ transform:translateY(-2px); }
-
-  .section-label{
-    font-size:.78rem;
-    font-weight:700;
-    letter-spacing:.08em;
-    text-transform:uppercase;
-    color:var(--ink-soft);
-    margin:6px 2px 12px;
-  }
-
   .grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
@@ -147,30 +71,15 @@
     gap:6px;
     box-shadow:0 8px 24px rgba(0,0,0,.05);
     transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
-    position:relative;
   }
   .game-card:hover{
     transform:translateY(-3px);
     box-shadow:0 14px 34px rgba(0,0,0,.1);
     border-color:var(--crimson);
   }
-  .card-top-row{
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:8px;
-  }
   .emoji{font-size:2rem}
   .game-title{font-size:1.15rem;font-weight:700;color:var(--blue)}
   .game-desc{font-size:.88rem;color:var(--ink-soft);line-height:1.4}
-  .card-stats{
-    display:flex;
-    gap:14px;
-    font-size:.74rem;
-    color:var(--ink-soft);
-    margin-top:2px;
-  }
-  .card-stats b{ color:var(--ink); }
   .play{
     margin-top:10px;
     font-size:.8rem;
@@ -192,81 +101,41 @@
   <header>
     <div class="flagbar"></div>
     <div class="kicker">Kantipur &nbsp;·&nbsp; Games</div>
-    <h1>Kantipur Games Hub</h1>
-    <div class="subhead">A new challenge every day.</div>
-    <div class="top-row">
-      <span class="kg-edition" id="edition-label">Edition —</span>
-      <span class="kg-streak" id="streak-badge">🔥 0 day streak</span>
-    </div>
+    <h1>Pick a Game</h1>
+    <div class="subhead">Four quick games. Choose one to play.</div>
   </header>
 
-  <div class="hero" id="hero">
-    <div class="hero-kicker">Today's Featured Game</div>
-    <div class="hero-title"><span id="hero-emoji">🎮</span><span id="hero-name">Loading…</span></div>
-    <div class="hero-desc" id="hero-desc">Loading today's challenge…</div>
-    <a class="hero-cta" id="hero-cta" href="#">Play Today's Game →</a>
-  </div>
+  <div class="grid">
+    <a class="game-card" href="games/Jigsaw%20Puzzle/index.html">
+      <div class="emoji">🧩</div>
+      <div class="game-title">Daily Jigsaw</div>
+      <div class="game-desc">Pick a photo, swap pieces, beat your best time.</div>
+      <div class="play">Play →</div>
+    </a>
 
-  <div class="section-label">All Games</div>
-  <div class="grid" id="game-grid"></div>
+    <a class="game-card" href="games/Math%20mania/index.html">
+      <div class="emoji">🧮</div>
+      <div class="game-title">Quick Math</div>
+      <div class="game-desc">60 seconds on the clock — solve as many as you can.</div>
+      <div class="play">Play →</div>
+    </a>
+
+    <a class="game-card" href="games/Memory%20Flip/index.html">
+      <div class="emoji">🃏</div>
+      <div class="game-title">Memory Flip</div>
+      <div class="game-desc">Match the day's headlines before time runs out.</div>
+      <div class="play">Play →</div>
+    </a>
+
+    <a class="game-card" href="games/Tap%20Mania/index.html">
+      <div class="emoji">👆</div>
+      <div class="game-title">Tap Mania</div>
+      <div class="game-desc">How fast can you tap in 10 seconds?</div>
+      <div class="play">Play →</div>
+    </a>
+  </div>
 
   <footer>Kantipur Games Hub</footer>
 </div>
-
-<script src="assets/hub-core.js"></script>
-<script>
-(function(){
-  var GAME_DESCRIPTIONS = {
-    jigsaw: "Today's news photo, pieced together. Beat your best time.",
-    quickmath: "60 seconds on the clock — solve as many as you can.",
-    memoryflip: "Match today's headlines before time runs out.",
-    tapmania: "How fast can you tap in 10 seconds?"
-  };
-
-  var streak = KG.getStreak();
-  document.getElementById("streak-badge").textContent =
-    "🔥 " + streak.count + " day" + (streak.count === 1 ? "" : "s") + " streak";
-  document.getElementById("edition-label").textContent = "Edition #" + KG.editionNumber();
-
-  var featured = KG.featuredGame();
-  document.getElementById("hero-emoji").textContent = featured.emoji;
-  document.getElementById("hero-name").textContent = featured.title;
-  document.getElementById("hero-desc").textContent = GAME_DESCRIPTIONS[featured.id] +
-    (KG.playedToday(featured.id) ? " You've already played today — go again to beat your score!" : "");
-  document.getElementById("hero-cta").href = featured.url;
-  document.getElementById("hero-cta").textContent =
-    (KG.playedToday(featured.id) ? "Play Again →" : "Play Today's Game →");
-
-  var gridEl = document.getElementById("game-grid");
-  KG.GAMES.forEach(function(id){
-    var meta = KG.GAME_META[id];
-    var best = KG.getBest(id);
-    var today = KG.getTodayScore(id);
-    var isFeatured = id === featured.id;
-
-    var a = document.createElement("a");
-    a.className = "game-card";
-    a.href = meta.url;
-
-    var playedTag = KG.playedToday(id) ? '<span class="kg-today-tag">✓ Played today</span>' : "";
-    var featuredTag = isFeatured ? '<span class="kg-today-tag" style="color:#a8710a;background:#fff2e0;border-color:#f3d9b1;">★ Today\'s pick</span>' : "";
-
-    a.innerHTML =
-      '<div class="card-top-row">' +
-        '<div class="emoji">' + meta.emoji + '</div>' +
-        (playedTag || featuredTag) +
-      '</div>' +
-      '<div class="game-title">' + meta.title + '</div>' +
-      '<div class="game-desc">' + GAME_DESCRIPTIONS[id] + '</div>' +
-      '<div class="card-stats">' +
-        '<span>Best <b>' + best + '</b></span>' +
-        '<span>Today <b>' + (today === null ? "—" : today) + '</b></span>' +
-      '</div>' +
-      '<div class="play">Play →</div>';
-
-    gridEl.appendChild(a);
-  });
-})();
-</script>
 </body>
 </html>

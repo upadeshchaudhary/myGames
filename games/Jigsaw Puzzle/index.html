@@ -2,29 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Daily Jigsaw</title>
-<link rel="stylesheet" href="../../assets/hub-core.css">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="wrap">
   <a href="../../index.html" style="display:inline-block;margin-bottom:10px;font-size:.8rem;color:#003893;text-decoration:none;">← All Games</a>
   <h1>🧩 Daily Jigsaw</h1>
-  <div class="sub">Today's news photo, pieced together. Beat your best time.</div>
-  <div class="top-meta">
-    <span class="kg-edition" id="edition-label">Edition —</span>
-    <span class="kg-streak" id="streak-badge">🔥 0 day streak</span>
-  </div>
+  <div class="sub">Pick a photo. Swap pieces. Beat your best time.</div>
 
-  <div class="difficulty" id="difficulty">
-    <button class="diff-btn" data-diff="easy">Easy 3×3</button>
-    <button class="diff-btn active" data-diff="normal">Normal 4×4</button>
-    <button class="diff-btn" data-diff="hard">Hard 5×5</button>
-  </div>
-
-  <div class="today-photo-label">📸 Today's Photo <span id="pastPhotosToggle">· browse past photos</span></div>
-  <div class="picker" id="picker" style="display:none"></div>
+  <div class="picker" id="picker"></div>
 
   <div class="card">
     <div class="title" id="puzzleTitle">Loading…</div>
@@ -37,7 +24,6 @@
     <div class="controls">
       <button id="restartBtn">Restart</button>
       <button id="shuffleBtn" class="secondary">Shuffle</button>
-      <button id="hintBtn" class="secondary">💡 Hint</button>
     </div>
     <div class="best" id="bestVal">Best: --</div>
   </div>
@@ -48,15 +34,10 @@
     <h2>🎉 Puzzle Complete!</h2>
     <div class="score" id="finalScore">0</div>
     <div id="finalStats" class="sub"></div>
-    <div id="photoCredit" class="sub" style="margin-top:6px;font-style:italic"></div>
-    <div class="kg-result-actions">
-      <button id="playAgainBtn">Try Again</button>
-      <button class="kg-share-btn" id="shareBtn">📤 Share Score</button>
-    </div>
+    <button id="playAgainBtn">Play Again</button>
   </div>
 </div>
 
-<script src="../../assets/hub-core.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

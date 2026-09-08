@@ -1,19 +1,12 @@
 (function(){
-  const ICONS = ["🇳🇵", "🏔️", "🏏", "🛕", "🚌", "🌾", "🎬", "📰"];
+  const SYMBOLS = ["🇳🇵", "🏔️", "🏏", "🛕", "🚌", "🌾", "🎬", "📰"];
   const TOTAL_TIME = 60;
   const START_SCORE = 1000;
   const MATCH_BONUS = 100;
   const MISMATCH_PENALTY = 20;
   const TICK_PENALTY_INTERVAL = 5;
   const TICK_PENALTY = 10;
-  const GAME_ID = "memoryflip";
-
-  // Today's 8 stories, each paired with an icon for the memory board.
-  const STORIES = KG.dailyHeadlines(ICONS.length).map((story, i) => ({
-    icon: ICONS[i],
-    cat: story.cat,
-    text: story.text
-  }));
+  const STORAGE_KEY = "memoryFlipBest";
 
   const boardEl = document.getElementById("board");
   const timeEl = document.getElementById("stat-time");
@@ -23,7 +16,6 @@
   const bestEl = document.getElementById("stat-best");
   const restartBtn = document.getElementById("restart-btn");
   const modalRestartBtn = document.getElementById("modal-restart-btn");
-  const modalShareBtn = document.getElementById("modal-share-btn");
   const overlay = document.getElementById("modal-overlay");
   const modalHeadline = document.getElementById("modal-headline");
   const modalKicker = document.getElementById("modal-kicker");
@@ -32,8 +24,6 @@
   const modalTime = document.getElementById("modal-time");
   const modalBest = document.getElementById("modal-best");
   const modalNewBest = document.getElementById("modal-newbest");
-  const streakBadgeEl = document.getElementById("streak-badge");
-  const editionLabelEl = document.getElementById("edition-label");
 
   let cards = [];
   let firstCard = null;
@@ -46,15 +36,23 @@
   let score = START_SCORE;
   let gameStarted = false;
   let gameFinished = false;
-  let bestScore = KG.getBest(GAME_ID);
-  let toastTimer = null;
+  let bestScore = loadBestScore();
 
-  editionLabelEl.textContent = "Edition #" + KG.editionNumber();
-  refreshStreakBadge();
+  function loadBestScore(){
+    try{
+      return parseInt(localStorage.getItem(STORAGE_KEY), 10) || 0;
+    }catch(e){
+      return 0;
+    }
+  }
 
-  function refreshStreakBadge(){
-    const streak = KG.getStreak();
-    KG.renderStreakBadge(streakBadgeEl, streak.count);
+  function saveBestScore(finalScore){
+    if(finalScore > bestScore){
+      bestScore = finalScore;
+      try{ localStorage.setItem(STORAGE_KEY, bestScore); }catch(e){}
+      return true;
+    }
+    return false;
   }
 
   function shuffle(arr){
@@ -67,13 +65,11 @@
   }
 
   function createCards(){
-    const doubled = STORIES.map((s, i) => ({ storyIdx: i, value: s.icon }))
-      .concat(STORIES.map((s, i) => ({ storyIdx: i, value: s.icon })));
+    const doubled = SYMBOLS.concat(SYMBOLS);
     const shuffled = shuffle(doubled);
-    return shuffled.map((item, i) => ({
+    return shuffled.map((value, i) => ({
       id: i,
-      storyIdx: item.storyIdx,
-      value: item.value,
+      value: value,
       matched: false,
       flipped: false
     }));
@@ -144,24 +140,6 @@
     }
   }
 
-  function showHeadlineToast(storyIdx){
-    const story = STORIES[storyIdx];
-    let toast = document.getElementById("headline-toast");
-    if(!toast){
-      toast = document.createElement("div");
-      toast.id = "headline-toast";
-      toast.style.cssText = "position:fixed;left:50%;bottom:24px;transform:translateX(-50%);" +
-        "background:#1a1a1a;color:#fff;padding:10px 16px;border-radius:10px;font-size:.82rem;" +
-        "max-width:90vw;text-align:center;z-index:999;box-shadow:0 8px 22px rgba(0,0,0,.25);" +
-        "opacity:0;transition:opacity .2s ease;";
-      document.body.appendChild(toast);
-    }
-    toast.textContent = "📰 " + story.cat + ": " + story.text;
-    toast.style.opacity = "1";
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => { toast.style.opacity = "0"; }, 1800);
-  }
-
   function handleMatch(){
     firstCard.card.matched = true;
     secondCard.card.matched = true;
@@ -170,10 +148,9 @@
     matchedPairs++;
     score += MATCH_BONUS;
     updateStats();
-    showHeadlineToast(firstCard.card.storyIdx);
     resetTurn();
 
-    if(matchedPairs === STORIES.length){
+    if(matchedPairs === SYMBOLS.length){
       endGame(true);
     }
   }
@@ -215,15 +192,10 @@
   function updateStats(){
     timeEl.textContent = Math.max(0, timeRemaining);
     timeEl.classList.toggle("time-low", timeRemaining <= 10);
-    pairsEl.textContent = `${matchedPairs}/${STORIES.length}`;
+    pairsEl.textContent = `${matchedPairs}/${SYMBOLS.length}`;
     movesEl.textContent = moves;
     scoreEl.textContent = score;
     bestEl.textContent = bestScore;
-  }
-
-  function shareText(won){
-    const emojis = won ? "🃏🟩🟩🟩" : "🃏🟨🟥";
-    return `${emojis} I scored ${score} in Kantipur Memory Flip (Edition #${KG.editionNumber()}). Can you beat me?\n${location.href.split("?")[0]}`;
   }
 
   function endGame(won){
@@ -232,8 +204,7 @@
     clearInterval(timer);
 
     const timeUsed = TOTAL_TIME - Math.max(0, timeRemaining);
-    const result = KG.finishRound(GAME_ID, score);
-    bestScore = result.best;
+    const isNewBest = saveBestScore(score);
 
     modalKicker.textContent = won ? "FINAL EDITION" : "TIME'S UP";
     modalHeadline.textContent = won ? "All Stories Matched" : "Edition Closed";
@@ -241,13 +212,10 @@
     modalMoves.textContent = moves;
     modalTime.textContent = `${timeUsed}s`;
     modalBest.textContent = bestScore;
-    modalNewBest.style.display = result.isNewBest ? "inline-block" : "none";
+    modalNewBest.style.display = isNewBest ? "inline-block" : "none";
 
     updateStats();
-    refreshStreakBadge();
     overlay.classList.add("show");
-
-    KG.attachShareButton(modalShareBtn, () => shareText(won));
   }
 
   function initializeGame(){

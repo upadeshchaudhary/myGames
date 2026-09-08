@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tap Mania</title>
-<link rel="stylesheet" href="../../assets/hub-core.css">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,11 +15,6 @@
   <div id="start-screen" class="screen active">
     <h1>TAP MANIA</h1>
     <p>How fast can you tap?</p>
-    <div class="top-meta">
-      <span class="kg-edition" id="edition-label">Edition —</span>
-      <span class="kg-streak" id="streak-badge">🔥 0 day streak</span>
-    </div>
-    <p class="kg-challenge-tag" id="challenge-tag">🎯 Today's Challenge: Beat 60 taps</p>
     <p class="best">🏆 Best: <span id="best-score-display">0</span></p>
     <button id="start-btn">START</button>
   </div>
@@ -51,18 +45,12 @@
     <h2>TIME'S UP!</h2>
     <div id="final-score">0</div>
     <p>TAPS</p>
-    <p id="taps-per-sec" class="tps"></p>
     <p id="new-best-msg" class="hidden">🏆 New Personal Best!</p>
-    <p id="challenge-result" class="hidden"></p>
-    <div class="kg-result-actions">
-      <button id="play-again-btn">TRY AGAIN</button>
-      <button class="kg-share-btn" id="share-btn">📤 Share Score</button>
-    </div>
+    <button id="play-again-btn">PLAY AGAIN</button>
   </div>
 
 </div>
 
-<script src="../../assets/hub-core.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
