@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Word Builder — Nepali</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Word Builder</h1>
+      <nav>
+        <a href="#" id="gamesLink">games</a>
+        <button id="restartBtn">restart</button>
+      </nav>
+    </header>
+
+    <p class="sub">Learn Nepali, one word at a time.</p>
+
+    <div id="game">
+      <div class="meta-row">
+        <span id="progress">Word 1 of 20 · <em id="difficulty">Easy</em></span>
+        <span id="scoreLabel">Score <span id="score">0</span></span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+
+      <div class="timer-wrap">
+        <svg class="timer-ring" viewBox="0 0 120 120">
+          <circle class="ring-bg" cx="60" cy="60" r="52"></circle>
+          <circle class="ring-fg" id="ringFg" cx="60" cy="60" r="52"></circle>
+        </svg>
+        <span class="timer-num" id="timerNum">8</span>
+      </div>
+
+      <div class="clue-block">
+        <span class="clue-label">clue</span>
+        <p id="clue">Loading</p>
+      </div>
+
+      <div class="target" id="target"></div>
+
+      <div class="tiles" id="tiles"></div>
+
+      <button id="skipBtn">skip this word</button>
+
+      <p class="feedback" id="feedback"></p>
+    </div>
+
+    <div id="complete" class="hidden">
+      <h2>round complete</h2>
+      <h3>Congratulations!</h3>
+      <p class="final-score" id="finalScore">0</p>
+      <p class="final-label">points earned</p>
+      <div class="controls">
+        <button id="playAgain">Play again</button>
+        <button id="shareBtn">Share result</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
