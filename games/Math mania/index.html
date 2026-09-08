@@ -12,8 +12,14 @@
   <a href="../../index.html" style="display:inline-block;margin-bottom:10px;font-size:.75rem;color:#003893;text-decoration:none;">← All Games</a>
 
   <header class="board-head">
-    <span class="board-title">QUICK MATH</span>
-    <span class="board-best">BEST <b id="best-score">0</b></span>
+    <div class="board-title-group">
+      <span class="board-title">QUICK MATH</span>
+      <span class="board-mode">MODE <b id="difficulty">Easy</b></span>
+    </div>
+    <div class="board-meta">
+      <span class="board-best">BEST <b id="best-score">0</b></span>
+      <span class="board-combo">COMBO <b id="combo">0</b></span>
+    </div>
   </header>
 
   <!-- START PANEL -->
@@ -33,14 +39,6 @@
       <div class="readout-cell">
         <span class="readout-label">Score</span>
         <span class="readout-value" id="score">0</span>
-      </div>
-      <div class="readout-cell">
-        <span class="readout-label">Mode</span>
-        <span class="readout-value mode-value" id="difficulty">Easy</span>
-      </div>
-      <div class="readout-cell">
-        <span class="readout-label">Combo</span>
-        <span class="readout-value combo-value" id="combo">0</span>
       </div>
       <div class="readout-cell">
         <span class="readout-label">Mistakes</span>
