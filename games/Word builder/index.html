@@ -21,7 +21,10 @@
     <div id="game">
       <div class="meta-row">
         <span id="progress">Word 1 of 20 · <em id="difficulty">Easy</em></span>
-        <span id="scoreLabel">Score <span id="score">0</span></span>
+        <span class="round-stats">
+          <span id="scoreLabel">Score <span id="score">0</span></span>
+          <span id="mistakesLabel">Mistakes <span id="mistakes">0</span></span>
+        </span>
       </div>
       <div class="progress-track">
         <div class="progress-fill" id="progressFill"></div>
@@ -54,6 +57,7 @@
       <h3>Congratulations!</h3>
       <p class="final-score" id="finalScore">0</p>
       <p class="final-label">points earned</p>
+      <p class="final-mistakes">Mistakes <b id="finalMistakes">0</b></p>
       <div class="controls">
         <button id="playAgain">Play again</button>
         <button id="shareBtn">Share result</button>

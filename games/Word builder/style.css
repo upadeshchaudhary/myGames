@@ -79,7 +79,15 @@ nav a:hover, nav button:hover { color: var(--ink); }
   color: var(--muted);
 }
 
-#scoreLabel span { font-weight: 700; }
+#scoreLabel span,
+#mistakesLabel span { font-weight: 700; }
+
+.round-stats {
+  display: flex;
+  gap: 18px;
+}
+
+#mistakesLabel span { color: var(--bad); }
 
 .progress-track {
   position: relative;
@@ -191,6 +199,10 @@ nav a:hover, nav button:hover { color: var(--ink); }
   height: 2px;
 }
 
+.target.wrong .slot .letter {
+  color: var(--bad);
+}
+
 .tiles {
   display: flex;
   flex-wrap: wrap;
@@ -221,6 +233,10 @@ nav a:hover, nav button:hover { color: var(--ink); }
 .tile.used {
   opacity: 0.2;
   pointer-events: none;
+}
+
+.tile.selected {
+  border-color: var(--ink);
 }
 
 .tile.shake {
@@ -292,6 +308,14 @@ nav a:hover, nav button:hover { color: var(--ink); }
   font-size: 15px;
 }
 
+.final-mistakes {
+  color: var(--muted);
+  margin: -18px 0 30px;
+  font-size: 15px;
+}
+
+.final-mistakes b { color: var(--bad); }
+
 .controls {
   display: flex;
   justify-content: center;
@@ -324,4 +348,6 @@ nav a:hover, nav button:hover { color: var(--ink); }
   h1 { font-size: 30px; }
   #clue { font-size: 26px; }
   .tile { width: 60px; height: 60px; font-size: 21px; }
+  .meta-row { align-items: flex-start; gap: 12px; }
+  .round-stats { flex-direction: column; align-items: flex-end; gap: 2px; }
 }

@@ -70,7 +70,7 @@ const WORD_POOL = [
 ];
 
 const WORDS_PER_SESSION = 20;
-const DISTRACTOR_COUNT = 4;
+const DISTRACTOR_COUNT_BY_DIFFICULTY = { Easy: 4, Medium: 6, Hard: 8 };
 const TIME_BY_DIFFICULTY = { Easy: 10, Medium: 8, Hard: 6 };
 const ALL_LETTERS = [...new Set(WORD_POOL.flatMap((w) => w.word))];
 
@@ -82,10 +82,12 @@ let timer = null;
 let timeLeft = 0;
 let timeTotal = 0;
 let locked = false;
+let wrongWords = 0;
 
 const progressEl = document.getElementById("progress");
 const difficultyEl = document.getElementById("difficulty");
 const scoreEl = document.getElementById("score");
+const mistakesEl = document.getElementById("mistakes");
 const progressFill = document.getElementById("progressFill");
 const ringFg = document.getElementById("ringFg");
 const timerNum = document.getElementById("timerNum");
@@ -97,6 +99,7 @@ const skipBtn = document.getElementById("skipBtn");
 const gameEl = document.getElementById("game");
 const completeEl = document.getElementById("complete");
 const finalScoreEl = document.getElementById("finalScore");
+const finalMistakesEl = document.getElementById("finalMistakes");
 const playAgainBtn = document.getElementById("playAgain");
 const shareBtn = document.getElementById("shareBtn");
 const restartBtn = document.getElementById("restartBtn");
@@ -138,7 +141,9 @@ function startGame() {
   buildSession();
   current = 0;
   score = 0;
+  wrongWords = 0;
   scoreEl.textContent = score;
+  mistakesEl.textContent = wrongWords;
   gameEl.classList.remove("hidden");
   completeEl.classList.add("hidden");
   loadWord();
@@ -169,7 +174,7 @@ function loadWord() {
 
   const distractors = shuffle(
     ALL_LETTERS.filter((l) => !data.word.includes(l))
-  ).slice(0, DISTRACTOR_COUNT);
+  ).slice(0, DISTRACTOR_COUNT_BY_DIFFICULTY[difficulty]);
 
   const tileLetters = shuffle([...data.word, ...distractors]);
 
@@ -205,22 +210,45 @@ function loadWord() {
 function onTileClick(tileEl, letter, data) {
   if (locked || tileEl.classList.contains("used")) return;
 
-  const expected = data.word[built.length];
-  if (letter === expected) {
-    built.push(letter);
-    tileEl.classList.add("used");
-    const slots = targetEl.querySelectorAll(".slot");
-    const slot = slots[built.length - 1];
-    slot.querySelector(".letter").textContent = letter;
-    slot.classList.add("filled");
+  built.push(letter);
+  tileEl.classList.add("used");
+  const slots = targetEl.querySelectorAll(".slot");
+  const slot = slots[built.length - 1];
+  slot.querySelector(".letter").textContent = letter;
+  slot.classList.add("filled");
 
-    if (built.length === data.word.length) {
+  if (built.length === data.word.length) {
+    const isCorrect = built.every((part, index) => part === data.word[index]);
+    if (isCorrect) {
       onWordComplete();
+    } else {
+      onWrongWord();
     }
   } else {
-    tileEl.classList.add("shake");
-    setTimeout(() => tileEl.classList.remove("shake"), 300);
+    tileEl.classList.add("selected");
   }
+}
+
+function onWrongWord() {
+  wrongWords += 1;
+  mistakesEl.textContent = wrongWords;
+  feedbackEl.textContent = "Try again";
+  feedbackEl.className = "feedback bad";
+  targetEl.classList.add("wrong");
+
+  setTimeout(() => {
+    built = [];
+    targetEl.querySelectorAll(".slot").forEach((slot) => {
+      slot.querySelector(".letter").textContent = "";
+      slot.classList.remove("filled");
+    });
+    tilesEl.querySelectorAll(".tile").forEach((tile) => {
+      tile.classList.remove("used", "selected");
+    });
+    targetEl.classList.remove("wrong");
+    feedbackEl.textContent = "";
+    feedbackEl.className = "feedback";
+  }, 450);
 }
 
 function onWordComplete() {
@@ -256,6 +284,7 @@ function finishRound() {
   gameEl.classList.add("hidden");
   completeEl.classList.remove("hidden");
   finalScoreEl.textContent = score;
+  finalMistakesEl.textContent = wrongWords;
 }
 
 skipBtn.addEventListener("click", () => {
