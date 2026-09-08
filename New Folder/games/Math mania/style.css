@@ -76,15 +76,6 @@ body {
 .panel { text-align: center; }
 .hidden { display: none; }
 
-.top-meta{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-bottom:16px;
-}
-
 .lede {
   color: var(--paper-dim);
   font-size: 15px;

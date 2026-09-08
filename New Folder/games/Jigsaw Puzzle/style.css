@@ -20,21 +20,6 @@ body{
 .wrap{width:100%;max-width:480px;text-align:center}
 h1{font-size:1.5rem;letter-spacing:1px;margin-bottom:4px;color:var(--accent)}
 .sub{color:var(--muted);font-size:.85rem;margin-bottom:16px}
-.top-meta{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
-.difficulty{display:flex;gap:8px;justify-content:center;margin-bottom:14px}
-.diff-btn{
-  background:transparent;color:var(--text);border:1.5px solid var(--border);
-  padding:7px 14px;border-radius:999px;font-size:.8rem;font-weight:700;cursor:pointer;
-}
-.diff-btn.active{background:var(--accent2);border-color:var(--accent2);color:#fff}
-.today-photo-label{
-  font-size:.78rem;font-weight:700;letter-spacing:.03em;color:var(--accent2);
-  margin-bottom:8px;text-transform:uppercase;
-}
-.today-photo-label span{
-  font-weight:500;text-transform:none;color:var(--muted);cursor:pointer;
-  text-decoration:underline;letter-spacing:0;
-}
 .picker{display:flex;gap:8px;overflow-x:auto;padding:8px 0 16px;justify-content:center;flex-wrap:wrap}
 .thumb{
   width:56px;height:56px;border-radius:10px;background-size:cover;background-position:center;

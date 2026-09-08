@@ -2,14 +2,12 @@
   "use strict";
 
   var GAME_SECONDS = 60;
-  var GAME_ID = "quickmath";
-  var NEPAL_QUESTION_CHANCE = 0.2; // roughly 1 in 5 questions
+  var STORAGE_KEY = "quickmath_best_score";
 
   var score = 0;
   var correctAnswers = 0;
   var wrongAnswers = 0;
   var currentAnswer = 0;
-  var isNepalQuestion = false;
   var timeRemaining = GAME_SECONDS;
   var timer = null;
   var gameFinished = false;
@@ -20,31 +18,28 @@
 
   var btnStart = document.getElementById("btn-start");
   var btnAgain = document.getElementById("btn-again");
-  var btnShare = document.getElementById("btn-share");
   var choicesEl = document.getElementById("choices");
   var choiceButtons = choicesEl.querySelectorAll(".choice-btn");
 
   var questionEl = document.getElementById("question");
   var feedbackEl = document.getElementById("feedback");
-  var nepalTagEl = document.getElementById("nepal-tag");
   var scoreEl = document.getElementById("score");
   var timeLeftEl = document.getElementById("time-left");
   var timebarEl = document.getElementById("timebar");
   var bestScoreEl = document.getElementById("best-score");
-  var streakBadgeEl = document.getElementById("streak-badge");
-  var editionLabelEl = document.getElementById("edition-label");
 
   var finalScoreEl = document.getElementById("final-score");
   var resultCorrectEl = document.getElementById("result-correct");
   var resultWrongEl = document.getElementById("result-wrong");
   var newBestMsgEl = document.getElementById("new-best-msg");
 
-  editionLabelEl.textContent = "Edition #" + KG.editionNumber();
-  refreshStreakBadge();
+  function getBestScore() {
+    var stored = localStorage.getItem(STORAGE_KEY);
+    return stored ? parseInt(stored, 10) : 0;
+  }
 
-  function refreshStreakBadge() {
-    var streak = KG.getStreak();
-    KG.renderStreakBadge(streakBadgeEl, streak.count);
+  function setBestScore(value) {
+    localStorage.setItem(STORAGE_KEY, String(value));
   }
 
   function randInt(min, max) {
@@ -74,20 +69,7 @@
     return shuffle(options);
   }
 
-  function generateNepalQuestion() {
-    var fact = KG.dailyNepalFact();
-    // Vary the exact set slightly each round so it's not always identical,
-    // while keeping the correct answer's neighborhood the same "difficulty".
-    var options = fact.choices.slice();
-    if (options.indexOf(fact.a) === -1) options[0] = fact.a;
-    currentAnswer = fact.a;
-    isNepalQuestion = true;
-    nepalTagEl.classList.remove("hidden");
-    questionEl.textContent = fact.q;
-    renderChoices(shuffle(options));
-  }
-
-  function generateMathQuestion() {
+  function generateQuestion() {
     var operations = ["+", "-", "×", "÷"];
     var op = operations[randInt(0, 3)];
     var a, b, text, answer;
@@ -116,18 +98,8 @@
     }
 
     currentAnswer = answer;
-    isNepalQuestion = false;
-    nepalTagEl.classList.add("hidden");
     questionEl.textContent = text + " = ?";
     renderChoices(buildOptions(answer));
-  }
-
-  function generateQuestion() {
-    if (Math.random() < NEPAL_QUESTION_CHANCE) {
-      generateNepalQuestion();
-    } else {
-      generateMathQuestion();
-    }
   }
 
   function renderChoices(options) {
@@ -160,7 +132,7 @@
     }
 
     if (isCorrect) {
-      score += isNepalQuestion ? 2 : 1; // Nepal Numbers rounds are worth a small bonus
+      score += 1;
       correctAnswers += 1;
       btn.classList.add("correct");
     } else {
@@ -217,29 +189,25 @@
     startTimer();
   }
 
-  function shareText() {
-    return "🧮 I scored " + score + " in Kantipur Quick Math (Edition #" + KG.editionNumber() +
-      "). " + correctAnswers + " correct, " + wrongAnswers + " wrong. Beat that!\n" +
-      location.href.split("?")[0];
-  }
-
   function endGame() {
     gameFinished = true;
     window.clearInterval(timer);
 
-    var result = KG.finishRound(GAME_ID, score);
-    refreshStreakBadge();
+    var best = getBestScore();
+    var isNewBest = score > best;
+    if (isNewBest) {
+      setBestScore(score);
+      best = score;
+    }
 
     finalScoreEl.textContent = String(score);
     resultCorrectEl.textContent = String(correctAnswers);
     resultWrongEl.textContent = String(wrongAnswers);
-    bestScoreEl.textContent = String(result.best);
-    newBestMsgEl.classList.toggle("hidden", !result.isNewBest);
+    bestScoreEl.textContent = String(best);
+    newBestMsgEl.classList.toggle("hidden", !isNewBest);
 
     panelGame.classList.add("hidden");
     panelResult.classList.remove("hidden");
-
-    KG.attachShareButton(btnShare, shareText);
   }
 
   btnStart.addEventListener("click", startGame);
@@ -251,5 +219,5 @@
     checkAnswer(parseInt(btn.dataset.value, 10), btn);
   });
 
-  bestScoreEl.textContent = String(KG.getBest(GAME_ID));
+  bestScoreEl.textContent = String(getBestScore());
 })();
