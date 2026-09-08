@@ -210,7 +210,9 @@ async function playRound() {
   setMessage("Follow it through the shuffle...");
   await sleep(250);
 
+  board.classList.add("shuffling");
   await shuffleCards();
+  board.classList.remove("shuffling");
 
   startBtn.textContent = "Pick Nepal";
   setMessage("Pick the Nepal card.");
