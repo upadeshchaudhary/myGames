@@ -98,10 +98,11 @@ function renderBoard() {
     el.addEventListener('drop', (e) => handleDrop(e, slotIdx));
     el.addEventListener('dragend', handleDragEnd);
 
-    // --- Touch Dragging Support ---
-    el.addEventListener('touchstart', (e) => handleTouchStart(e, slotIdx), { passive: false });
-    el.addEventListener('touchmove', handleTouchMove, { passive: false });
-    el.addEventListener('touchend', (e) => handleTouchEnd(e, slotIdx));
+    // --- Pointer Dragging Support (touch screens) ---
+    el.addEventListener('pointerdown', (e) => handlePointerDown(e, slotIdx));
+    el.addEventListener('pointermove', handlePointerMove);
+    el.addEventListener('pointerup', handlePointerUp);
+    el.addEventListener('pointercancel', handlePointerCancel);
 
     boardEl.appendChild(el);
   });
@@ -152,32 +153,40 @@ function handleDragEnd(e) {
   draggedSlotIdx = null;
 }
 
-// --- Touch Handlers (Mobile Support) ---
-let activeTouchPiece = null;
+// --- Pointer Handlers (Mobile Support) ---
+let activePointerPiece = null;
+let activePointerId = null;
 
-function handleTouchStart(e, slotIdx) {
+function handlePointerDown(e, slotIdx) {
+  if (e.pointerType !== 'touch' || finished) return;
+  e.preventDefault();
   if (finished) return;
   draggedSlotIdx = slotIdx;
-  activeTouchPiece = e.currentTarget;
-  activeTouchPiece.classList.add('dragging');
+  activePointerPiece = e.currentTarget;
+  activePointerId = e.pointerId;
+  activePointerPiece.setPointerCapture(e.pointerId);
+  activePointerPiece.classList.add('dragging');
 }
 
-function handleTouchMove(e) {
-  if (!activeTouchPiece) return;
-  e.preventDefault(); // Prevent page scrolling while dragging
+function handlePointerMove(e) {
+  if (!activePointerPiece || e.pointerId !== activePointerId) return;
+  e.preventDefault();
 }
 
-function handleTouchEnd(e) {
-  if (!activeTouchPiece) return;
-  
-  activeTouchPiece.classList.remove('dragging');
-  const touch = e.changedTouches[0];
-  const targetEl = document.elementFromPoint(touch.clientX, touch.clientY);
+function handlePointerUp(e) {
+  if (!activePointerPiece || e.pointerId !== activePointerId) return;
+  e.preventDefault();
+  const sourcePiece = activePointerPiece;
+  const sourceSlotIdx = draggedSlotIdx;
+  const targetEl = document.elementFromPoint(e.clientX, e.clientY)?.closest('.piece');
 
-  if (targetEl && targetEl.classList.contains('piece')) {
+  sourcePiece.releasePointerCapture(e.pointerId);
+  sourcePiece.classList.remove('dragging');
+
+  if (targetEl) {
     const targetSlotIdx = parseInt(targetEl.dataset.slot, 10);
-    if (!isNaN(targetSlotIdx) && draggedSlotIdx !== targetSlotIdx) {
-      swapPieces(draggedSlotIdx, targetSlotIdx);
+    if (!isNaN(targetSlotIdx) && sourceSlotIdx !== targetSlotIdx) {
+      swapPieces(sourceSlotIdx, targetSlotIdx);
       updateMoves();
       renderBoard();
       checkCompletion();
@@ -185,7 +194,16 @@ function handleTouchEnd(e) {
   }
 
   draggedSlotIdx = null;
-  activeTouchPiece = null;
+  activePointerPiece = null;
+  activePointerId = null;
+}
+
+function handlePointerCancel(e) {
+  if (!activePointerPiece || e.pointerId !== activePointerId) return;
+  activePointerPiece.classList.remove('dragging');
+  draggedSlotIdx = null;
+  activePointerPiece = null;
+  activePointerId = null;
 }
 
 function swapPieces(slotA, slotB) {
