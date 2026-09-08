@@ -15,8 +15,8 @@ const COUNTRIES = [
 const TARGET_CODE = "NP";
 const SHUFFLE_MOVES = 28; // random shuffle steps
 const SHUFFLE_MOVE_MS_START = 340; // medium speed to begin
-const SHUFFLE_MOVE_MS_MID = 200; // faster middle section
-const SHUFFLE_MOVE_MS_END = 300; // slower ending for easier tracking
+const SHUFFLE_MOVE_MS_MID = 300; // faster middle section
+const SHUFFLE_MOVE_MS_END = 280; // slower ending for easier tracking
 
 const board = document.getElementById("board");
 const startBtn = document.getElementById("startBtn");
