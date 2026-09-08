@@ -34,6 +34,18 @@
         <span class="readout-label">Score</span>
         <span class="readout-value" id="score">0</span>
       </div>
+      <div class="readout-cell">
+        <span class="readout-label">Mode</span>
+        <span class="readout-value mode-value" id="difficulty">Easy</span>
+      </div>
+      <div class="readout-cell">
+        <span class="readout-label">Combo</span>
+        <span class="readout-value combo-value" id="combo">0</span>
+      </div>
+      <div class="readout-cell">
+        <span class="readout-label">Mistakes</span>
+        <span class="readout-value mistake-value" id="mistakes">0</span>
+      </div>
     </div>
 
     <div class="timebar-track">
@@ -61,6 +73,10 @@
     <div class="result-split">
       <span class="split-correct"><b id="result-correct">0</b> correct</span>
       <span class="split-wrong"><b id="result-wrong">0</b> wrong</span>
+    </div>
+    <div class="result-split">
+      <span>Best combo <b id="result-combo">0</b></span>
+      <span>Accuracy <b id="result-accuracy">0%</b></span>
     </div>
     <p class="new-best hidden" id="new-best-msg">New best score</p>
     <button id="btn-again" class="btn-primary">PLAY AGAIN</button>

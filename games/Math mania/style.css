@@ -110,13 +110,14 @@ body {
 /* game panel */
 
 .readout {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
   margin-bottom: 12px;
 }
 
 .readout-cell {
-  flex: 1;
+  min-width: 0;
   background: #f7f5ef;
   border: 1px solid var(--panel-edge);
   border-radius: 8px;
@@ -132,6 +133,8 @@ body {
   letter-spacing: 0.08em;
   color: var(--paper-dim);
   text-transform: uppercase;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .readout-value {
@@ -143,6 +146,15 @@ body {
 }
 
 #score { color: #003893; }
+
+.mode-value {
+  font-size: 16px;
+  color: var(--green);
+}
+
+.combo-value { color: var(--amber); }
+
+.mistake-value { color: var(--red); }
 
 .timebar-track {
   height: 4px;
@@ -268,6 +280,8 @@ body {
 .split-wrong b { color: var(--red); }
 .result-split b { font-family: 'Sono', monospace; }
 
+#result-combo, #result-accuracy { color: #003893; }
+
 .new-best {
   font-family: 'Sono', monospace;
   font-size: 13px;
@@ -278,4 +292,34 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .timebar-fill, .btn-primary { transition: none; }
+}
+
+@media (max-width: 420px) {
+  body { padding: 12px; }
+
+  .board {
+    padding: 18px 16px 22px;
+  }
+
+  .readout { gap: 8px; }
+
+  .readout-cell {
+    padding: 8px;
+  }
+
+  .readout-label {
+    font-size: 9px;
+  }
+
+  .readout-value {
+    font-size: 22px;
+  }
+
+  .mode-value {
+    font-size: 15px;
+  }
+
+  .question {
+    font-size: clamp(30px, 10vw, 40px);
+  }
 }
