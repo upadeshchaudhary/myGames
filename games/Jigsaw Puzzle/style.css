@@ -30,16 +30,18 @@ body {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  min-height: 100vh;
-  padding: 20px 12px 40px;
+  min-height: 100dvh;
+  padding: 0;
 }
 
 .wrap {
   width: 100%;
-  max-width: 500px;
+  max-width: none;
+  min-height: 100dvh;
+  padding: clamp(16px, 3vw, 32px);
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: clamp(12px, 2vw, 20px);
 }
 
 /* Header */
@@ -78,6 +80,8 @@ h1 {
 
 /* Main Card */
 .card {
+  width: 100%;
+  flex: 1;
   background: var(--card-bg);
   border-radius: var(--radius-lg);
   padding: 20px;
@@ -144,6 +148,7 @@ h1 {
   display: flex;
   gap: 12px;
   align-items: flex-start;
+  justify-content: center;
 }
 
 .reference-box {
@@ -176,6 +181,7 @@ h1 {
 .board-container {
   flex: 0 0 calc(100% - 111px);
   width: calc(100% - 111px);
+  max-width: min(760px, calc(100dvh - 260px));
   min-width: 0;
   padding: 4px;
   background: var(--border);
@@ -188,6 +194,7 @@ h1 {
   gap: 3px;
   width: 100%;
   min-width: 0;
+  max-width: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 10px;
   overflow: hidden;
@@ -359,7 +366,11 @@ h1 {
 
 @media (max-width: 400px) {
   body {
-    padding: 14px 8px 28px;
+    padding: 10px 0 20px;
+  }
+
+  .wrap {
+    padding: 12px 0;
   }
 
   .header h1 {
@@ -371,7 +382,7 @@ h1 {
   }
 
   .card {
-    padding: 14px;
+    padding: 12px;
   }
 
   .card-header {
