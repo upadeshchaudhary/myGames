@@ -16,20 +16,27 @@
   <div class="app">
 
     <header class="header">
-      <h1>Unlimited Tic-Tac-Toe</h1>
+      <h1>Tic Tac Toe</h1>
       <p>Three marks at a time. Outsmart your opponent.</p>
     </header>
 
     <main class="card">
 
-      <section class="difficulty" id="difficulty">
-        <span class="difficulty-label">Difficulty</span>
+      <section class="game-top">
+        <a class="return-games" href="../../index.html">
+          <span class="return-icon">←</span>
+          <span class="return-text">Return to Games</span>
+        </a>
 
-        <div class="difficulty-pills">
-          <button class="pill" data-diff="easy">Easy</button>
-          <button class="pill active" data-diff="medium">Medium</button>
-          <button class="pill" data-diff="hard">Hard</button>
-        </div>
+        <section class="difficulty" id="difficulty">
+          <span class="difficulty-label">Difficulty</span>
+
+          <div class="difficulty-pills">
+            <button class="pill" data-diff="easy">Easy</button>
+            <button class="pill active" data-diff="medium">Medium</button>
+            <button class="pill" data-diff="hard">Hard</button>
+          </div>
+        </section>
       </section>
 
       <section class="players">
@@ -76,10 +83,6 @@
     </main>
 
   </div>
-
-  <footer class="return-section">
-    <a class="return-games" href="../../index.html">Return to Games</a>
-  </footer>
 
   <div class="modal-overlay hidden" id="modalOverlay">
 
