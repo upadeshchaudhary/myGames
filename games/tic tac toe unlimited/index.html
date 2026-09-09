@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unlimited Tic-Tac-Toe</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div class="app">
+
+    <header class="header">
+      <h1>Unlimited Tic-Tac-Toe</h1>
+      <p>Three marks at a time. Outsmart your opponent.</p>
+    </header>
+
+    <main class="card">
+
+      <section class="difficulty" id="difficulty">
+        <span class="difficulty-label">Difficulty</span>
+
+        <div class="difficulty-pills">
+          <button class="pill" data-diff="easy">Easy</button>
+          <button class="pill active" data-diff="medium">Medium</button>
+          <button class="pill" data-diff="hard">Hard</button>
+        </div>
+      </section>
+
+      <section class="players">
+
+        <div class="player x-player active" id="playerX">
+          <span class="player-mark">X</span>
+          <span class="player-name">You</span>
+        </div>
+
+        <div class="vs">VS</div>
+
+        <div class="player o-player" id="playerO">
+          <span class="player-mark">O</span>
+          <span class="player-name">Computer</span>
+        </div>
+
+      </section>
+
+      <div class="status" id="status">
+        Your turn
+      </div>
+
+      <div class="board" id="board">
+
+        <button class="cell" data-idx="0"></button>
+        <button class="cell" data-idx="1"></button>
+        <button class="cell" data-idx="2"></button>
+
+        <button class="cell" data-idx="3"></button>
+        <button class="cell" data-idx="4"></button>
+        <button class="cell" data-idx="5"></button>
+
+        <button class="cell" data-idx="6"></button>
+        <button class="cell" data-idx="7"></button>
+        <button class="cell" data-idx="8"></button>
+
+      </div>
+
+      <button class="reset-btn" id="resetBtn">
+        <span>↻</span>
+        Restart Game
+      </button>
+
+    </main>
+
+  </div>
+
+  <footer class="return-section">
+    <a class="return-games" href="../../index.html">Return to Games</a>
+  </footer>
+
+  <div class="modal-overlay hidden" id="modalOverlay">
+
+    <div class="modal-card">
+
+      <div class="modal-icon">🏆</div>
+
+      <div class="modal-text" id="modalText"></div>
+
+      <button class="modal-play-again" id="playAgainBtn">
+        Play Again
+      </button>
+
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
