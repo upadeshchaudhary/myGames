@@ -13,21 +13,45 @@ const COUNTRIES = [
   { code: "AU", name: "Australia", flag: "🇦🇺" },
 ];
 const TARGET_CODE = "NP";
-const SHUFFLE_MOVES = 28; // random shuffle steps
-const SHUFFLE_MOVE_MS_START = 340; // medium speed to begin
-const SHUFFLE_MOVE_MS_MID = 300; // faster middle section
-const SHUFFLE_MOVE_MS_END = 280; // slower ending for easier tracking
+const MODES = {
+  easy: {
+    shuffleMoves: 8,
+    moveMsStart: 620,
+    moveMsMid: 520,
+    moveMsEnd: 500,
+    predictable: true,
+    label: "Easy"
+  },
+  medium: {
+    shuffleMoves: 16,
+    moveMsStart: 420,
+    moveMsMid: 360,
+    moveMsEnd: 330,
+    predictable: false,
+    label: "Medium"
+  },
+  hard: {
+    shuffleMoves: 28,
+    moveMsStart: 340,
+    moveMsMid: 300,
+    moveMsEnd: 280,
+    predictable: false,
+    label: "Hard"
+  }
+};
 
 const board = document.getElementById("board");
 const startBtn = document.getElementById("startBtn");
 const messageEl = document.getElementById("message");
 const streakEl = document.getElementById("streak");
 const roundEl = document.getElementById("round");
+const modeSelect = document.getElementById("modeSelect");
 
 let streak = 0;
 let round = 1;
 let cards = []; // { el, code, isTarget }
 let picking = false;
+let currentMode = modeSelect.value;
 
 function setMessage(text, kind) {
   messageEl.textContent = text || "";
@@ -119,36 +143,62 @@ function animateSwap(cardA, cardB, durationMs) {
   });
 }
 
-async function shuffleCards() {
-  for (let i = 0; i < SHUFFLE_MOVES; i++) {
-    const idxA = Math.floor(Math.random() * cards.length);
-    let idxB = Math.floor(Math.random() * cards.length);
-    while (idxB === idxA) idxB = Math.floor(Math.random() * cards.length);
+function getShufflePair(i) {
+  const mode = MODES[currentMode];
 
-    const progress = i / (SHUFFLE_MOVES - 1);
+  if (mode.predictable) {
+    const pairList = [
+      [0, 1],
+      [1, 2],
+      [2, 3],
+      [3, 4],
+      [4, 5],
+      [5, 6],
+      [6, 7],
+      [7, 8]
+    ];
+
+    const pair = pairList[i % pairList.length];
+    return pair;
+  }
+
+  const idxA = Math.floor(Math.random() * cards.length);
+  let idxB = Math.floor(Math.random() * cards.length);
+  while (idxB === idxA) idxB = Math.floor(Math.random() * cards.length);
+
+  return [idxA, idxB];
+}
+
+async function shuffleCards() {
+  const mode = MODES[currentMode];
+
+  for (let i = 0; i < mode.shuffleMoves; i++) {
+    const [idxA, idxB] = getShufflePair(i);
+
+    const progress = i / (mode.shuffleMoves - 1);
     let duration;
 
     if (progress < 0.6) {
       const startProgress = progress / 0.6;
       duration = Math.round(
-        SHUFFLE_MOVE_MS_START + (SHUFFLE_MOVE_MS_MID - SHUFFLE_MOVE_MS_START) * startProgress
+        mode.moveMsStart + (mode.moveMsMid - mode.moveMsStart) * startProgress
       );
     } else if (progress < 0.85) {
       const midProgress = (progress - 0.6) / 0.25;
       duration = Math.round(
-        SHUFFLE_MOVE_MS_MID - (SHUFFLE_MOVE_MS_MID - 150) * midProgress
+        mode.moveMsMid - (mode.moveMsMid - 150) * midProgress
       );
     } else {
       const endProgress = (progress - 0.85) / 0.15;
       duration = Math.round(
-        150 + (SHUFFLE_MOVE_MS_END - 150) * endProgress
+        150 + (mode.moveMsEnd - 150) * endProgress
       );
     }
 
     await animateSwap(cards[idxA], cards[idxB], duration);
     [cards[idxA], cards[idxB]] = [cards[idxB], cards[idxA]];
 
-    const interMoveDelay = i < SHUFFLE_MOVES - 1 ? Math.max(8, Math.round(duration * 0.07)) : 0;
+    const interMoveDelay = i < mode.shuffleMoves - 1 ? Math.max(8, Math.round(duration * 0.07)) : 0;
     if (interMoveDelay > 0) {
       await sleep(interMoveDelay);
     }
@@ -218,6 +268,11 @@ async function playRound() {
   setMessage("Pick the Nepal card.");
   enablePicking();
 }
+
+modeSelect.addEventListener("change", () => {
+  currentMode = modeSelect.value;
+  setMessage("Mode set to " + MODES[currentMode].label + ".", "");
+});
 
 startBtn.addEventListener("click", () => {
   if (startBtn.textContent === "Try again") {

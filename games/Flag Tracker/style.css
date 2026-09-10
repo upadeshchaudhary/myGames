@@ -51,12 +51,36 @@ h1 {
   display: flex;
   justify-content: center;
   gap: 18px;
-  margin-bottom: 28px;
+  margin-bottom: 16px;
   font-size: 18px;
   color: var(--ink);
 }
 
 .status-row span span {
+  font-weight: 700;
+}
+
+.mode-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.mode-label {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--muted-text);
+}
+
+.mode-select {
+  background: var(--card-white);
+  color: var(--ink);
+  border: 2px solid var(--code-muted);
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-size: 14px;
   font-weight: 700;
 }
 
